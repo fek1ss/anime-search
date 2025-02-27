@@ -3,40 +3,18 @@ import SearchBar from '../../components/SearchBar/SearchBar.tsx';
 import AniList from '../../components/AniList/AniList.tsx';
 import Pagination from '../../components/Pagination/Pagination.tsx';
 import styles from './styles.module.css';
+import { Anime, AnimeProps, ApiError, ApiResponse } from '../../interfaces/anime.ts';
 
-interface Anime {
-    mal_id: number;
-    synopsis: string;
-    title: string;
-    images: {
-        jpg: {
-            image_url: string;
-        };
-    };
-}
-
-interface AnimeProps {
-    favorites: Anime[];
-    setFavorites: React.Dispatch<React.SetStateAction<Anime[]>>;
-}
-
-interface Error {
-    status_message: string;
-}
-
-interface ApiResponse extends Error {
-    data: Anime[];
-    pagination: {
-        last_visible_page: number;
-    };
-}
+/**
+ *
+ */
 
 const Home: React.FC<AnimeProps> = ({ favorites, setFavorites }) => {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [anime, setAnime] = useState<Anime[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(0);
-    const [error, setError] = useState<Error | null>(null);
+    const [error, setError] = useState<ApiError | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
@@ -44,6 +22,13 @@ const Home: React.FC<AnimeProps> = ({ favorites, setFavorites }) => {
     }, [searchQuery]);
 
     useEffect(() => {
+        /**
+         * Получает список аниме с API Jikan
+         *
+         * @param {string} searchQuery - Поисковый запрос (если пустой, загружается топ аниме)
+         * @param {number} currentPage - Текущая страница результатов
+         * @returns {Promise<void>} - Обновляет состояние аниме и страниц, либо устанавливает ошибку
+         */
         const fetchAnime = async () => {
             setIsLoading(true);
 
@@ -62,13 +47,13 @@ const Home: React.FC<AnimeProps> = ({ favorites, setFavorites }) => {
                     setError(null);
                 } else {
                     setError({
-                        status_message:
-                            data.status_message || 'Error fetching anime.',
+                        message: data.message || 'Error fetching anime.',
                     });
+                    console.log('error is ', data.message);
                 }
             } catch (e) {
                 setError({
-                    status_message: 'Network error. Please try again later.',
+                    message: 'Network error. Please try again later.',
                 });
             } finally {
                 setIsLoading(false);
@@ -78,11 +63,18 @@ const Home: React.FC<AnimeProps> = ({ favorites, setFavorites }) => {
         fetchAnime();
     }, [searchQuery, currentPage]);
 
+    /**
+     * Добавляет или удаляет аниме из списка избранного
+     *
+     * @param {Anime} anime - Объект аниме, который нужно добавить или удалить
+     * @returns {void} - Функция не возвращает значение, но обновляет состояние favorites
+     */
     const addToFavorites = (anime: Anime) => {
         setFavorites(prevF => {
             const isFavorite = prevF.some(fav => fav.mal_id === anime.mal_id);
-            if (isFavorite)
-                return prevF.filter(fav => fav.mal_id !== anime.mal_id);
+
+            // Если аниме уже в избранном, удаляем его, иначе добавляем
+            if (isFavorite) return prevF.filter(fav => fav.mal_id !== anime.mal_id);
             else return [...prevF, anime];
         });
     };
@@ -90,24 +82,16 @@ const Home: React.FC<AnimeProps> = ({ favorites, setFavorites }) => {
     return (
         <div className={styles.Home}>
             <SearchBar onSearch={setSearchQuery} />
-            {error && <p className={styles.error}>{error.status_message}</p>}
+            {error && <p className={styles.error}>{error.message}</p>}
 
             {isLoading ? (
                 <div className={styles.loader}></div>
             ) : (
-                <AniList
-                    addToFavorites={addToFavorites}
-                    favorites={favorites}
-                    anime={anime}
-                />
+                <AniList addToFavorites={addToFavorites} favorites={favorites} anime={anime} />
             )}
 
             {totalPages > 1 && (
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                />
+                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
             )}
         </div>
     );

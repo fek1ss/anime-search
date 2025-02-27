@@ -27,10 +27,7 @@ const App = () => {
                     <Route
                         path="/"
                         element={
-                            <Home
-                                favorites={favorites}
-                                setFavorites={setFavorites}
-                            />
+                            <Home favorites={favorites} setFavorites={setFavorites} />
                         }
                     />
                     <Route
