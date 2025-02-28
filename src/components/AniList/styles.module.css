@@ -10,7 +10,7 @@ p {
 }
 
 @media (max-width: 640px) {
-    .anime-list {
+    .animeList {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;

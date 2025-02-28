@@ -18,15 +18,9 @@ interface AnimeProps {
     anime: Anime;
     addToFavorites?: (anime: Anime) => void;
     favorites: Anime[];
-    onRemove?: (ani: Anime) => void;
 }
 
-const AniCard: React.FC<AnimeProps> = ({
-    anime,
-    addToFavorites,
-    favorites,
-    onRemove,
-}) => {
+const AniCard: React.FC<AnimeProps> = ({ anime, addToFavorites, favorites }) => {
     const { isOpen, toggle } = useModal();
     const isFavorite = favorites.some(fav => fav.mal_id === anime.mal_id);
 

@@ -80,5 +80,3 @@ This project uses the [Jikan API](https://jikan.moe/) for fetching anime data. B
 # Live Demo
 
 Check out the live version of the project here: [Anime Search](https://anime-search-seven.vercel.app/)
-
-damir

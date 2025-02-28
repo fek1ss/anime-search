@@ -1,27 +1,11 @@
 import React from 'react';
 import AniCard from '../../components/AniCard/AniCard.tsx';
 import styles from './styles.module.css';
-
-interface Anime {
-    mal_id: number;
-    synopsis: string;
-    title: string;
-    images: {
-        jpg: {
-            image_url: string;
-        };
-    };
-}
-
-interface AnimeProps {
-    anime?: Anime[];
-    favorites: Anime[];
-    setFavorites: React.Dispatch<React.SetStateAction<Anime[]>>;
-}
+import { AnimeProps, Anime } from '../../interfaces/anime.ts';
 
 const Favorites: React.FC<AnimeProps> = ({ favorites, setFavorites }) => {
-    const onRemove = (ani: Anime) => {
-        setFavorites(prev => prev.filter(anime => anime.mal_id !== ani.mal_id));
+    const onRemove = (favAnime: Anime) => {
+        setFavorites(prev => prev.filter(anime => anime.mal_id !== favAnime.mal_id));
     };
     return (
         <div>
@@ -29,14 +13,14 @@ const Favorites: React.FC<AnimeProps> = ({ favorites, setFavorites }) => {
             {favorites.length === 0 ? (
                 <p>No favorites added yet.</p>
             ) : (
-                <div className="anime-list">
+                <div className={styles.animeList}>
                     {favorites.map(anime => (
-                        <AniCard
-                            key={anime.mal_id}
-                            anime={anime}
-                            favorites={favorites}
-                            onRemove={onRemove}
-                        />
+                        <div className={styles.favoriteCard}>
+                            <AniCard key={anime.mal_id} anime={anime} favorites={favorites} />
+                            <button className={styles.btnRemove} onClick={() => onRemove(anime)}>
+                                remove
+                            </button>
+                        </div>
                     ))}
                 </div>
             )}

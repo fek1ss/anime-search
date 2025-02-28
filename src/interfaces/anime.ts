@@ -14,6 +14,12 @@ export interface AnimeProps {
     setFavorites: React.Dispatch<React.SetStateAction<Anime[]>>;
 }
 
+export interface AniListProps {
+    anime: Anime[];
+    addToFavorites: (anime: Anime) => void;
+    favorites: Anime[];
+}
+
 export interface ApiError {
     message?: string;
 }
