@@ -18,8 +18,8 @@
     height: auto;
     padding: 1rem;
     border-radius: 1rem;
-    background-color: #242424;
-    border: 2px solid #ff4500;
+    background-color: var(--background-color);
+    border: 2px solid var(--main-color);
 }
 
 .modalBox p {

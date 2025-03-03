@@ -70,6 +70,6 @@
 
 .animeCard span {
     cursor: pointer;
-    color: #ff4500;
+    color: var(--main-color);
     font-size: smaller;
 }

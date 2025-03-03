@@ -50,17 +50,17 @@
 
 .feature p {
     font-size: 1rem;
-    color: #fff; /* Белый цвет текста для контраста */
+    color: #fff;
 }
 
 .apiInfo {
     margin-top: 2rem;
     font-size: 1rem;
-    color: #ff0000; /* Белый цвет текста для контраста */
-    background-color: var(--main-black); /* Используем основной цвет */
+    color: var(--main-color);
+    background-color: var(--main-black);
     padding: 10px;
     border-radius: 8px;
-    box-shadow: 0 2px 5px var(--main-shadow); /* Тень с rgba для элементов */
+    box-shadow: 0 2px 5px var(--main-shadow);
 }
 
 @media (max-width: 640px) {
